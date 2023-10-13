@@ -1,7 +1,8 @@
-import { DEFAULT_API_HOST, DEFAULT_MODELS, StoreKey } from "../constant";
+import { DEFAULT_API_HOST, DEFAULT_MODELS, Path, StoreKey } from "../constant";
 import { getHeaders } from "../client/api";
 import { getClientConfig } from "../config/client";
 import { createPersistStore } from "../utils/store";
+import { useNavigate } from "react-router-dom";
 
 let fetchState = 0; // 0 not fetch, 1 fetching, 2 done
 
@@ -16,6 +17,7 @@ const DEFAULT_ACCESS_STATE = {
   hideUserApiKey: false,
   hideBalanceQuery: false,
   disableGPT4: false,
+  isAuth: false,
 
   openaiUrl: DEFAULT_OPENAI_URL,
 };
@@ -37,6 +39,15 @@ export const useAccessStore = createPersistStore(
     },
     updateOpenAiUrl(url: string) {
       set(() => ({ openaiUrl: url?.trim() }));
+    },
+    serverAuth() {
+      return fetch("/api/isauth", {
+        method: "post",
+        body: null,
+        headers: {
+          ...getHeaders(),
+        },
+      }).then((res) => res.json());
     },
     isAuthorized() {
       this.fetch();

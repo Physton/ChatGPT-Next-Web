@@ -15,8 +15,16 @@ export function AuthPage() {
   const access = useAccessStore();
 
   const goHome = () => navigate(Path.Home);
-  const goChat = () => navigate(Path.Chat);
-  const resetAccessCode = () => { access.updateCode(""); access.updateToken(""); }; // Reset access code to empty string
+  // const goChat = () => navigate(Path.Chat);
+  const goChat = () => {
+    access.serverAuth().then((res) => {
+      if (res.isAuth) navigate(Path.Chat);
+    });
+  };
+  const resetAccessCode = () => {
+    access.updateCode("");
+    access.updateToken("");
+  }; // Reset access code to empty string
 
   useEffect(() => {
     if (getClientConfig()?.isApp) {
@@ -42,6 +50,11 @@ export function AuthPage() {
         onChange={(e) => {
           access.updateCode(e.currentTarget.value);
         }}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            goChat();
+          }
+        }}
       />
       {!access.hideUserApiKey ? (
         <>
@@ -54,6 +67,11 @@ export function AuthPage() {
             onChange={(e) => {
               access.updateToken(e.currentTarget.value);
             }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                goChat();
+              }
+            }}
           />
         </>
       ) : null}
@@ -64,13 +82,13 @@ export function AuthPage() {
           type="primary"
           onClick={goChat}
         />
-        <IconButton
+        {/*<IconButton
           text={Locale.Auth.Later}
           onClick={() => {
             resetAccessCode();
             goHome();
           }}
-        />
+        />*/}
       </div>
     </div>
   );

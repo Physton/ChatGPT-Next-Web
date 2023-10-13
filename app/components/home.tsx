@@ -22,6 +22,7 @@ import {
   Routes,
   Route,
   useLocation,
+  useNavigate,
 } from "react-router-dom";
 import { SideBar } from "./sidebar";
 import { useAppConfig } from "../store/config";
@@ -123,14 +124,21 @@ const loadAsyncGoogleFont = () => {
 };
 
 function Screen() {
+  const navigate = useNavigate();
+  const accessStore = useAccessStore();
+
   const config = useAppConfig();
   const location = useLocation();
   const isHome = location.pathname === Path.Home;
   const isAuth = location.pathname === Path.Auth;
   const isMobileScreen = useMobileScreen();
-  const shouldTightBorder = getClientConfig()?.isApp || (config.tightBorder && !isMobileScreen);
+  const shouldTightBorder =
+    getClientConfig()?.isApp || (config.tightBorder && !isMobileScreen);
 
   useEffect(() => {
+    accessStore.serverAuth().then((res) => {
+      if (!res.isAuth) navigate(Path.Auth);
+    });
     loadAsyncGoogleFont();
   }, []);
 
