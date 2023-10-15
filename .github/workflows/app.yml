@@ -1,9 +1,10 @@
 name: Release App
 
-on:
-  workflow_dispatch:
-  release:
-    types: [published]
+# on:
+#   workflow_dispatch:
+#   release:
+#     types: [published]
+on: []
 
 jobs:
   create-release:
