@@ -55,7 +55,7 @@
     "bundle": {
       "active": true,
       "category": "DeveloperTool",
-      "copyright": "2023, Zhang Yifei All Rights Reserved.",
+      "copyright": "2023, Zhang Physton All Rights Reserved.",
       "deb": {
         "depends": []
       },
@@ -67,7 +67,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.yida.chatgpt.next.web",
+      "identifier": "com.physton.chatgpt.next.web",
       "longDescription": "ChatGPT Next Web is a cross-platform ChatGPT client, including Web/Win/Linux/OSX/PWA.",
       "macOS": {
         "entitlements": null,
@@ -91,13 +91,13 @@
     "updater": {
       "active": true,
       "endpoints": [
-        "https://github.com/Yidadaa/ChatGPT-Next-Web/releases/latest/download/latest.json"
+        "https://github.com/Physton/ChatGPT-Next-Web/releases/latest/download/latest.json"
       ],
       "dialog": false,
       "windows": {
         "installMode": "passive"
       },
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IERFNDE4MENFM0Y1RTZBOTQKUldTVWFsNC96b0JCM3RqM2NmMnlFTmxIaStRaEJrTHNOU2VqRVlIV1hwVURoWUdVdEc1eDcxVEYK"
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEMzMEU3QTM1QUQxNDk2NTAKUldSUWxoU3ROWG9Pd3c5QjJOMW01a0dBOUxUenJsTk1uSnYyaE1IeU0zMUdLd0xmcnh1SUZSYmcK"
     },
     "windows": [
       {
