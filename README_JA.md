@@ -30,18 +30,18 @@
 [![MacOS][MacOS-image]][download-url]
 [![Linux][Linux-image]][download-url]
 
-[Web App](https://chatgpt.nextweb.fun/) / [Desktop App](https://github.com/Yidadaa/ChatGPT-Next-Web/releases) / [Issues](https://github.com/Yidadaa/ChatGPT-Next-Web/issues) / [Discord](https://discord.gg/YCkeafCafC) / [コーヒーをおごる](https://www.buymeacoffee.com/yidadaa) / [QQ グループ](https://github.com/Yidadaa/ChatGPT-Next-Web/discussions/1724) / [開発者への報酬](https://user-images.githubusercontent.com/16968934/227772541-5bcd52d8-61b7-488c-a203-0330d8006e2b.jpg)
+[Web App](https://chatgpt.nextweb.fun/) / [Desktop App](https://github.com/Physton/ChatGPT-Next-Web/releases) / [Issues](https://github.com/Yidadaa/ChatGPT-Next-Web/issues) / [Discord](https://discord.gg/YCkeafCafC) / [コーヒーをおごる](https://www.buymeacoffee.com/yidadaa) / [QQ グループ](https://github.com/Yidadaa/ChatGPT-Next-Web/discussions/1724) / [開発者への報酬](https://user-images.githubusercontent.com/16968934/227772541-5bcd52d8-61b7-488c-a203-0330d8006e2b.jpg)
 
 [web-url]: https://chatgpt.nextweb.fun
-[download-url]: https://github.com/Yidadaa/ChatGPT-Next-Web/releases
+[download-url]: https://github.com/Physton/ChatGPT-Next-Web/releases
 [Web-image]: https://img.shields.io/badge/Web-PWA-orange?logo=microsoftedge
 [Windows-image]: https://img.shields.io/badge/-Windows-blue?logo=windows
 [MacOS-image]: https://img.shields.io/badge/-MacOS-black?logo=apple
 [Linux-image]: https://img.shields.io/badge/-Linux-333?logo=ubuntu
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FYidadaa%2FChatGPT-Next-Web&env=OPENAI_API_KEY&env=CODE&project-name=chatgpt-next-web&repository-name=ChatGPT-Next-Web)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FPhyston%2FChatGPT-Next-Web&env=OPENAI_API_KEY&env=CODE&project-name=chatgpt-next-web&repository-name=ChatGPT-Next-Web)
 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/Yidadaa/ChatGPT-Next-Web)
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/Physton/ChatGPT-Next-Web)
 
 ![cover](./docs/images/cover.png)
 
@@ -50,7 +50,7 @@
 ## 特徴
 
 - Vercel で 1 分以内に**ワンクリックで無料デプロイ**。
-- コンパクトなクライアント (~5MB) on Linux/Windows/MacOS、[今すぐダウンロード](https://github.com/Yidadaa/ChatGPT-Next-Web/releases)
+- コンパクトなクライアント (~5MB) on Linux/Windows/MacOS、[今すぐダウンロード](https://github.com/Physton/ChatGPT-Next-Web/releases)
 - [RWKV-Runner](https://github.com/josStorer/RWKV-Runner) または [LocalAI](https://github.com/go-skynet/LocalAI) との使用をお勧めします
 - プライバシー第一、すべてのデータはブラウザにローカルに保存されます
 - マークダウンのサポート: LaTex、マーメイド、コードハイライトなど
@@ -84,7 +84,7 @@
 
 1. [OpenAI API Key](https://platform.openai.com/account/api-keys) を取得する;
 2. クリック
-   [![Vercel でデプロイ](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FYidadaa%2FChatGPT-Next-Web&env=OPENAI_API_KEY&env=CODE&project-name=chatgpt-next-web&repository-name=ChatGPT-Next-Web)をクリックします。`CODE` はあなたのページのパスワードであることを忘れないでください;
+   [![Vercel でデプロイ](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FPhyston%2FChatGPT-Next-Web&env=OPENAI_API_KEY&env=CODE&project-name=chatgpt-next-web&repository-name=ChatGPT-Next-Web)をクリックします。`CODE` はあなたのページのパスワードであることを忘れないでください;
 3. お楽しみください :)
 
 ## FAQ
@@ -183,7 +183,7 @@ NodeJS >= 18、Docker >= 20
 
 > [簡体字中国語 > 二次開発の進め方](./README_CN.md#开发)
 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/Yidadaa/ChatGPT-Next-Web)
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/Physton/ChatGPT-Next-Web)
 
 開発を始める前に、プロジェクトのルートに新しい `.env.local` ファイルを作成し、そこに api キーを置く必要があります:
 
@@ -211,12 +211,12 @@ yarn dev
 ### Docker (推奨)
 
 ```shell
-docker pull yidadaa/chatgpt-next-web
+docker pull Physton/chatgpt-next-web
 
 docker run -d -p 3000:3000 \
    -e OPENAI_API_KEY=sk-xxxx \
    -e CODE=your-password \
-   yidadaa/chatgpt-next-web
+   Physton/chatgpt-next-web
 ```
 
 プロキシの後ろでサービスを開始することができる:
@@ -226,7 +226,7 @@ docker run -d -p 3000:3000 \
    -e OPENAI_API_KEY=sk-xxxx \
    -e CODE=your-password \
    -e PROXY_URL=http://localhost:7890 \
-   yidadaa/chatgpt-next-web
+   Physton/chatgpt-next-web
 ```
 
 プロキシにパスワードが必要な場合:
@@ -238,7 +238,7 @@ docker run -d -p 3000:3000 \
 ### シェル
 
 ```shell
-bash <(curl -s https://raw.githubusercontent.com/Yidadaa/ChatGPT-Next-Web/main/scripts/setup.sh)
+bash <(curl -s https://raw.githubusercontent.com/Physton/ChatGPT-Next-Web/main/scripts/setup.sh)
 ```
 
 ## スクリーンショット

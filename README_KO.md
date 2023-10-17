@@ -25,9 +25,9 @@
 
 [데모 Demo](https://chat-gpt-next-web.vercel.app/) / [피드백 Issues](https://github.com/Yidadaa/ChatGPT-Next-Web/issues) / [Discord 참여](https://discord.gg/zrhvHCr79N) / [QQ 그룹](https://user-images.githubusercontent.com/16968934/228190818-7dd00845-e9b9-4363-97e5-44c507ac76da.jpeg) / [개발자에게 기부](https://user-images.githubusercontent.com/16968934/227772541-5bcd52d8-61b7-488c-a203-0330d8006e2b.jpg) / [기부 Donate](#기부-donate-usdt)
 
-[![Vercel로 배포하기](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FYidadaa%2FChatGPT-Next-Web&env=OPENAI_API_KEY&env=CODE&project-name=chatgpt-next-web&repository-name=ChatGPT-Next-Web)
+[![Vercel로 배포하기](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FPhyston%2FChatGPT-Next-Web&env=OPENAI_API_KEY&env=CODE&project-name=chatgpt-next-web&repository-name=ChatGPT-Next-Web)
 
-[![Gitpod에서 열기](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/Yidadaa/ChatGPT-Next-Web)
+[![Gitpod에서 열기](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/Physton/ChatGPT-Next-Web)
 
 ![메인 화면](./docs/images/cover.png)
 
@@ -37,7 +37,7 @@
 
 1. [OpenAI API Key](https://platform.openai.com/account/api-keys)를 준비합니다.
 2. 오른쪽 버튼을 클릭하여 배포를 시작하십시오:
-   [![Vercel로 배포하기](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FYidadaa%2FChatGPT-Next-Web&env=OPENAI_API_KEY&env=CODE&project-name=chatgpt-next-web&repository-name=ChatGPT-Next-Web). Github 계정으로 바로 로그인하십시오. API Key와 [페이지 접근 비밀번호](#페이지-접근-비밀번호-설정) CODE를 환경 변수 페이지에 입력하십시오.
+   [![Vercel로 배포하기](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FPhyston%2FChatGPT-Next-Web&env=OPENAI_API_KEY&env=CODE&project-name=chatgpt-next-web&repository-name=ChatGPT-Next-Web). Github 계정으로 바로 로그인하십시오. API Key와 [페이지 접근 비밀번호](#페이지-접근-비밀번호-설정) CODE를 환경 변수 페이지에 입력하십시오.
 3. 배포가 완료되면 사용을 시작하십시오.
 4. (선택 사항) [사용자 정의 도메인 바인딩](https://vercel.com/docs/concepts/projects/domains/add-a-domain) : Vercel에서 할당한 도메인 DNS가 일부 지역에서 오염되어 있습니다. 사용자 정의 도메인을 바인딩하면 직접 연결할 수 있습니다.
 
@@ -123,7 +123,7 @@ OpenAI 내의 조직 ID를 지정합니다.
 
 아래 버튼을 클릭하여 개발을 시작하세요:
 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/Yidadaa/ChatGPT-Next-Web)
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/Physton/ChatGPT-Next-Web)
 
 코드 작성을 전, 프로젝트 루트 디렉토리에 `.env.local` 파일을 새로 만들고 해당 파일에 환경 변수를 입력해야 합니다:
 
@@ -150,12 +150,12 @@ BASE_URL=https://chatgpt1.nextweb.fun/api/proxy
 > ⚠️ 주의: docker 버전은 대부분의 경우 최신 버전보다 1~2일 뒤처집니다. 따라서 배포 후 "업데이트 가능" 알림이 지속적으로 나타날 수 있으며, 이는 정상적인 현상입니다.
 
 ```shell
-docker pull yidadaa/chatgpt-next-web
+docker pull Physton/chatgpt-next-web
 
 docker run -d -p 3000:3000 \
    -e OPENAI_API_KEY=sk-xxxx \
    -e CODE=페이지 접근 비밀번호 \
-   yidadaa/chatgpt-next-web
+   Physton/chatgpt-next-web
 ```
 
 프록시를 지정하려면 다음을 사용하세요:
@@ -166,7 +166,7 @@ docker run -d -p 3000:3000 \
    -e CODE=페이지 접근 비밀번호 \
    --net=host \
    -e PROXY_URL=http://127.0.0.1:7890 \
-   yidadaa/chatgpt-next-web
+   Physton/chatgpt-next-web
 ```
 
 로컬 프록시에 사용자 이름과 비밀번호가 필요한 경우, 아래와 같이 사용하세요:
@@ -182,7 +182,7 @@ docker run -d -p 3000:3000 \
 콘솔에서 아래의 명령을 실행하세요:
 
 ```shell
-bash <(curl -s https://raw.githubusercontent.com/Yidadaa/ChatGPT-Next-Web/main/scripts/setup.sh)
+bash <(curl -s https://raw.githubusercontent.com/Physton/ChatGPT-Next-Web/main/scripts/setup.sh)
 ```
 
 ⚠️ 주의: 설치 중 문제가 발생한 경우, docker로 배포하세요.
