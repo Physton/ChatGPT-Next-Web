@@ -1,3 +1,21 @@
+## 基于 [Yidadaa/ChatGPT-Next-Web](https://github.com/Yidadaa/ChatGPT-Next-Web) 修改
+
+- 默认发送键换成 Enter
+- 默认模型换成 gpt-3.5-turbo-16k
+- 默认全屏模式
+- ChatGPT Next 标题/文字换成 Chat AI
+- 设置了授权码 code 的情况下，默认进入授权页面，而不是进入聊天页面。并且必须是授权成功的状态，才会显示聊天页面。
+
+## docker 地址
+
+[https://hub.docker.com/r/physton/chatgpt-next-web](https://hub.docker.com/r/physton/chatgpt-next-web)
+
+## docker 部署
+
+参考 [Yidadaa/ChatGPT-Next-Web](https://github.com/Yidadaa/ChatGPT-Next-Web/blob/main/README_CN.md#%E5%AE%B9%E5%99%A8%E9%83%A8%E7%BD%B2-%E6%8E%A8%E8%8D%90) 原始部署文档，将 `yidadaa/chatgpt-next-web` 替换为 `physton/chatgpt-next-web` 即可。
+
+----
+
 <div align="center">
 <img src="./docs/images/icon.svg" alt="프리뷰"/>
 
@@ -18,7 +36,7 @@
 ## 사용 시작
 
 1. [OpenAI API Key](https://platform.openai.com/account/api-keys)를 준비합니다.
-2. 오른쪽 버튼을 클릭하여 배포를 시작하십시오: 
+2. 오른쪽 버튼을 클릭하여 배포를 시작하십시오:
    [![Vercel로 배포하기](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FYidadaa%2FChatGPT-Next-Web&env=OPENAI_API_KEY&env=CODE&project-name=chatgpt-next-web&repository-name=ChatGPT-Next-Web). Github 계정으로 바로 로그인하십시오. API Key와 [페이지 접근 비밀번호](#페이지-접근-비밀번호-설정) CODE를 환경 변수 페이지에 입력하십시오.
 3. 배포가 완료되면 사용을 시작하십시오.
 4. (선택 사항) [사용자 정의 도메인 바인딩](https://vercel.com/docs/concepts/projects/domains/add-a-domain) : Vercel에서 할당한 도메인 DNS가 일부 지역에서 오염되어 있습니다. 사용자 정의 도메인을 바인딩하면 직접 연결할 수 있습니다.

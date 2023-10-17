@@ -1,3 +1,21 @@
+## 基于 [Yidadaa/ChatGPT-Next-Web](https://github.com/Yidadaa/ChatGPT-Next-Web) 修改
+
+- 默认发送键换成 Enter
+- 默认模型换成 gpt-3.5-turbo-16k
+- 默认全屏模式
+- ChatGPT Next 标题/文字换成 Chat AI
+- 设置了授权码 code 的情况下，默认进入授权页面，而不是进入聊天页面。并且必须是授权成功的状态，才会显示聊天页面。
+
+## docker 地址
+
+[https://hub.docker.com/r/physton/chatgpt-next-web](https://hub.docker.com/r/physton/chatgpt-next-web)
+
+## docker 部署
+
+参考 [Yidadaa/ChatGPT-Next-Web](https://github.com/Yidadaa/ChatGPT-Next-Web/blob/main/README_CN.md#%E5%AE%B9%E5%99%A8%E9%83%A8%E7%BD%B2-%E6%8E%A8%E8%8D%90) 原始部署文档，将 `yidadaa/chatgpt-next-web` 替换为 `physton/chatgpt-next-web` 即可。
+
+----
+
 <div align="center">
 <img src="./docs/images/icon.svg" alt="icon"/>
 
