@@ -1,9 +1,9 @@
 version: '3.9'
 services:
-  chatgpt-next-web: 
+  chatgpt-next-web:
     profiles: ["no-proxy"]
     container_name: chatgpt-next-web
-    image: yidadaa/chatgpt-next-web
+    image: physton/chatgpt-next-web
     ports:
       - 3000:3000
     environment:
@@ -14,10 +14,10 @@ services:
       - HIDE_USER_API_KEY=$HIDE_USER_API_KEY
       - DISABLE_GPT4=$DISABLE_GPT4
 
-  chatgpt-next-web-proxy: 
+  chatgpt-next-web-proxy:
     profiles: ["proxy"]
     container_name: chatgpt-next-web-proxy
-    image: yidadaa/chatgpt-next-web
+    image: physton/chatgpt-next-web
     ports:
       - 3000:3000
     environment:
