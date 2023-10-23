@@ -204,3 +204,4 @@ bash <(curl -s https://raw.githubusercontent.com/Physton/ChatGPT-Next-Web/main/s
 ## 오픈소스 라이센스
 
 [MIT](https://opensource.org/license/mit/)
+
