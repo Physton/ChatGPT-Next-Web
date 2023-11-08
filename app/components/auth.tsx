@@ -12,18 +12,20 @@ import { getClientConfig } from "../config/client";
 
 export function AuthPage() {
   const navigate = useNavigate();
-  const access = useAccessStore();
+  const accessStore = useAccessStore();
 
   const goHome = () => navigate(Path.Home);
   // const goChat = () => navigate(Path.Chat);
   const goChat = () => {
-    access.serverAuth().then((res) => {
+    accessStore.serverAuth().then((res) => {
       if (res.isAuth) navigate(Path.Chat);
     });
   };
   const resetAccessCode = () => {
-    access.updateCode("");
-    access.updateToken("");
+    accessStore.update((access) => {
+      access.token = "";
+      access.accessCode = "";
+    });
   }; // Reset access code to empty string
 
   useEffect(() => {
@@ -46,9 +48,11 @@ export function AuthPage() {
         className={styles["auth-input"]}
         type="password"
         placeholder={Locale.Auth.Input}
-        value={access.accessCode}
+        value={accessStore.accessCode}
         onChange={(e) => {
-          access.updateCode(e.currentTarget.value);
+          accessStore.update(
+            (access) => (access.accessCode = e.currentTarget.value),
+          );
         }}
         onKeyDown={(e) => {
           if (e.key === "Enter") {
@@ -56,16 +60,18 @@ export function AuthPage() {
           }
         }}
       />
-      {!access.hideUserApiKey ? (
+      {!accessStore.hideUserApiKey ? (
         <>
           <div className={styles["auth-tips"]}>{Locale.Auth.SubTips}</div>
           <input
             className={styles["auth-input"]}
             type="password"
             placeholder={Locale.Settings.Token.Placeholder}
-            value={access.token}
+            value={accessStore.token}
             onChange={(e) => {
-              access.updateToken(e.currentTarget.value);
+              accessStore.update(
+                (access) => (access.token = e.currentTarget.value),
+              );
             }}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
