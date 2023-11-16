@@ -1,3 +1,10 @@
+# Physton/ChatGPT-Next-Web
+
+[![GitHub stars](https://img.shields.io/github/stars/Physton/ChatGPT-Next-Web?style=flat-square)](https://github.com/Physton/ChatGPT-Next-Web/stargazers)
+[![Downloads total](https://img.shields.io/github/downloads/Physton/ChatGPT-Next-Web/total?style=flat-square)](https://github.com/Physton/ChatGPT-Next-Web/releases)
+[![Docker Pulls](https://img.shields.io/docker/pulls/physton/chatgpt-next-web?style=flat-square)](https://hub.docker.com/r/physton/chatgpt-next-web)
+[![Docker stars](https://img.shields.io/docker/stars/physton/chatgpt-next-web?style=flat-square)](https://hub.docker.com/r/physton/chatgpt-next-web/stargazers)
+
 ## 基于 [Yidadaa/ChatGPT-Next-Web](https://github.com/Yidadaa/ChatGPT-Next-Web) 修改
 
 - 默认发送键换成 Enter
