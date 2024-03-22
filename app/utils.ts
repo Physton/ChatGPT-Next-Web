@@ -57,9 +57,9 @@ export async function downloadAs(text: string, filename: string) {
 
     if (result !== null) {
       try {
-        await window.__TAURI__.fs.writeBinaryFile(
+        await window.__TAURI__.fs.writeTextFile(
           result,
-          new Uint8Array([...text].map((c) => c.charCodeAt(0))),
+          text
         );
         showToast(Locale.Download.Success);
       } catch (error) {
@@ -292,9 +292,11 @@ export function getMessageImages(message: RequestMessage): string[] {
 }
 
 export function isVisionModel(model: string) {
-  return (
-    // model.startsWith("gpt-4-vision") ||
-    // model.startsWith("gemini-pro-vision") ||
-    model.includes("vision")
-  );
+  // Note: This is a better way using the TypeScript feature instead of `&&` or `||` (ts v5.5.0-dev.20240314 I've been using)
+  const visionKeywords = [
+    "vision",
+    "claude-3",
+  ];
+
+  return visionKeywords.some(keyword => model.includes(keyword));
 }
