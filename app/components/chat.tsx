@@ -59,8 +59,9 @@ import {
   getMessageTextContent,
   getMessageImages,
   isVisionModel,
-  compressImage,
 } from "../utils";
+
+import { compressImage } from "@/app/utils/chat";
 
 import dynamic from "next/dynamic";
 
@@ -87,6 +88,7 @@ import {
   Path,
   REQUEST_TIMEOUT_MS,
   UNFINISHED_INPUT,
+  ServiceProvider,
 } from "../constant";
 import { Avatar } from "./emoji";
 import { ContextPrompts, MaskAvatar, MaskConfig } from "./mask";
@@ -447,11 +449,24 @@ export function ChatActions(props: {
 
   // switch model
   const currentModel = chatStore.currentSession().mask.modelConfig.model;
+  const currentProviderName =
+    chatStore.currentSession().mask.modelConfig?.providerName ||
+    ServiceProvider.OpenAI;
   const allModels = useAllModels();
-  const models = useMemo(
-    () => allModels.filter((m) => m.available),
-    [allModels],
-  );
+  const models = useMemo(() => {
+    const filteredModels = allModels.filter((m) => m.available);
+    const defaultModel = filteredModels.find((m) => m.isDefault);
+
+    if (defaultModel) {
+      const arr = [
+        defaultModel,
+        ...filteredModels.filter((m) => m !== defaultModel),
+      ];
+      return arr;
+    } else {
+      return filteredModels;
+    }
+  }, [allModels]);
   const [showModelSelector, setShowModelSelector] = useState(false);
   const [showUploadImage, setShowUploadImage] = useState(false);
 
@@ -467,11 +482,14 @@ export function ChatActions(props: {
     // switch to first available model
     const isUnavaliableModel = !models.some((m) => m.name === currentModel);
     if (isUnavaliableModel && models.length > 0) {
-      const nextModel = models[0].name as ModelType;
-      chatStore.updateCurrentSession(
-        (session) => (session.mask.modelConfig.model = nextModel),
-      );
-      showToast(nextModel);
+      // show next model to default model if exist
+      let nextModel = models.find((model) => model.isDefault) || models[0];
+      chatStore.updateCurrentSession((session) => {
+        session.mask.modelConfig.model = nextModel.name;
+        session.mask.modelConfig.providerName = nextModel?.provider
+          ?.providerName as ServiceProvider;
+      });
+      showToast(nextModel.name);
     }
   }, [chatStore, currentModel, models]);
 
@@ -559,19 +577,26 @@ export function ChatActions(props: {
 
       {showModelSelector && (
         <Selector
-          defaultSelectedValue={currentModel}
+          defaultSelectedValue={`${currentModel}@${currentProviderName}`}
           items={models.map((m) => ({
-            title: m.displayName,
-            value: m.name,
+            title: `${m.displayName}${
+              m?.provider?.providerName
+                ? "(" + m?.provider?.providerName + ")"
+                : ""
+            }`,
+            value: `${m.name}@${m?.provider?.providerName}`,
           }))}
           onClose={() => setShowModelSelector(false)}
           onSelection={(s) => {
             if (s.length === 0) return;
+            const [model, providerName] = s[0].split("@");
             chatStore.updateCurrentSession((session) => {
-              session.mask.modelConfig.model = s[0] as ModelType;
+              session.mask.modelConfig.model = model as ModelType;
+              session.mask.modelConfig.providerName =
+                providerName as ServiceProvider;
               session.mask.syncGlobalConfig = false;
             });
-            showToast(s[0]);
+            showToast(model);
           }}
         />
       )}
@@ -1075,6 +1100,7 @@ function _Chat() {
             if (payload.url) {
               accessStore.update((access) => (access.openaiUrl = payload.url!));
             }
+            accessStore.update((access) => (access.useCustomConfig = true));
           });
         }
       } catch {
@@ -1102,11 +1128,13 @@ function _Chat() {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  
+
   const handlePaste = useCallback(
     async (event: React.ClipboardEvent<HTMLTextAreaElement>) => {
       const currentModel = chatStore.currentSession().mask.modelConfig.model;
-      if(!isVisionModel(currentModel)){return;}
+      if (!isVisionModel(currentModel)) {
+        return;
+      }
       const items = (event.clipboardData || window.clipboardData).items;
       for (const item of items) {
         if (item.kind === "file" && item.type.startsWith("image/")) {

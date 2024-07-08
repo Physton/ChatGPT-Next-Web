@@ -1,4 +1,11 @@
+import { DEFAULT_MODELS } from "../constant";
 import { LLMModel } from "../client/api";
+
+const customProvider = (modelName: string) => ({
+  id: modelName,
+  providerName: "Custom",
+  providerType: "custom",
+});
 
 export function collectModelTable(
   models: readonly LLMModel[],
@@ -11,12 +18,14 @@ export function collectModelTable(
       name: string;
       displayName: string;
       provider?: LLMModel["provider"]; // Marked as optional
+      isDefault?: boolean;
     }
   > = {};
 
   // default models
   models.forEach((m) => {
-    modelTable[m.name] = {
+    // using <modelName>@<providerId> as fullName
+    modelTable[`${m.name}@${m?.provider?.id}`] = {
       ...m,
       displayName: m.name, // 'provider' is copied over if it exists
     };
@@ -38,14 +47,47 @@ export function collectModelTable(
           (model) => (model.available = available),
         );
       } else {
-        modelTable[name] = {
-          name,
-          displayName: displayName || name,
-          available,
-          provider: modelTable[name]?.provider, // Use optional chaining
-        };
+        // 1. find model by name(), and set available value
+        let count = 0;
+        for (const fullName in modelTable) {
+          if (fullName.split("@").shift() == name) {
+            count += 1;
+            modelTable[fullName]["available"] = available;
+            if (displayName) {
+              modelTable[fullName]["displayName"] = displayName;
+            }
+          }
+        }
+        // 2. if model not exists, create new model with available value
+        if (count === 0) {
+          const provider = customProvider(name);
+          modelTable[`${name}@${provider?.id}`] = {
+            name,
+            displayName: displayName || name,
+            available,
+            provider, // Use optional chaining
+          };
+        }
       }
     });
+
+  return modelTable;
+}
+
+export function collectModelTableWithDefaultModel(
+  models: readonly LLMModel[],
+  customModels: string,
+  defaultModel: string,
+) {
+  let modelTable = collectModelTable(models, customModels);
+  if (defaultModel && defaultModel !== "") {
+    modelTable[defaultModel] = {
+      ...modelTable[defaultModel],
+      name: defaultModel,
+      available: true,
+      isDefault: true,
+    };
+  }
   return modelTable;
 }
 
@@ -60,4 +102,28 @@ export function collectModels(
   const allModels = Object.values(modelTable);
 
   return allModels;
+}
+
+export function collectModelsWithDefaultModel(
+  models: readonly LLMModel[],
+  customModels: string,
+  defaultModel: string,
+) {
+  const modelTable = collectModelTableWithDefaultModel(
+    models,
+    customModels,
+    defaultModel,
+  );
+  const allModels = Object.values(modelTable);
+  return allModels;
+}
+
+export function isModelAvailableInServer(
+  customModels: string,
+  modelName: string,
+  providerName: string,
+) {
+  const fullName = `${modelName}@${providerName}`;
+  const modelTable = collectModelTable(DEFAULT_MODELS, customModels);
+  return modelTable[fullName]?.available === false;
 }

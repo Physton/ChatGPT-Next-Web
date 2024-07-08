@@ -64,7 +64,7 @@ One-Click to get a well-designed cross-platform ChatGPT web UI, with GPT3, GPT4 
 
 [网页版](https://app.nextchat.dev/) / [客户端](https://github.com/Yidadaa/ChatGPT-Next-Web/releases) / [反馈](https://github.com/Yidadaa/ChatGPT-Next-Web/issues)
 
-[web-url]: https://chatgpt.nextweb.fun
+[web-url]: https://app.nextchat.dev/
 [download-url]: https://github.com/Yidadaa/ChatGPT-Next-Web/releases
 [Web-image]: https://img.shields.io/badge/Web-PWA-orange?logo=microsoftedge
 [Windows-image]: https://img.shields.io/badge/-Windows-blue?logo=windows
@@ -246,6 +246,18 @@ Google Gemini Pro Api Key.
 
 Google Gemini Pro Api Url.
 
+### `ANTHROPIC_API_KEY` (optional)
+
+anthropic claude Api Key.
+
+### `ANTHROPIC_API_VERSION` (optional)
+
+anthropic claude Api version.
+
+### `ANTHROPIC_URL` (optional)
+
+anthropic claude Api Url.
+
 ### `HIDE_USER_API_KEY` (optional)
 
 > Default: Empty
@@ -262,7 +274,7 @@ If you do not want users to use GPT-4, set this value to 1.
 
 > Default: Empty
 
-If you do want users to query balance, set this value to 1, or you should set it to 0.
+If you do want users to query balance, set this value to 1.
 
 ### `DISABLE_FAST_LINK` (optional)
 
@@ -278,6 +290,21 @@ If you want to disable parse settings from url, set this to 1.
 To control custom models, use `+` to add a custom model, use `-` to hide a model, use `name=displayName` to customize model name, separated by comma.
 
 User `-all` to disable all default models, `+all` to enable all default models.
+
+### `DEFAULT_MODEL` （optional）
+
+Change default model
+
+### `WHITE_WEBDEV_ENDPOINTS` (optional)
+
+You can use this option if you want to increase the number of webdav service addresses you are allowed to access, as required by the format：
+- Each address must be a complete endpoint 
+> `https://xxxx/yyy`
+- Multiple addresses are connected by ', '
+
+### `DEFAULT_INPUT_TEMPLATE` (optional)
+
+Customize the default template used to initialize the User Input Preprocessing configuration item in Settings.
 
 ## Requirements
 

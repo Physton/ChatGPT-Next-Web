@@ -1,13 +1,16 @@
 "use client";
+// azure and openai, using same models. so using same LLMApi.
 import {
   ApiPath,
   DEFAULT_API_HOST,
   DEFAULT_MODELS,
   OpenaiPath,
+  Azure,
   REQUEST_TIMEOUT_MS,
   ServiceProvider,
 } from "@/app/constant";
 import { useAccessStore, useAppConfig, useChatStore } from "@/app/store";
+import { collectModelsWithDefaultModel } from "@/app/utils/model";
 
 import {
   ChatOptions,
@@ -24,7 +27,6 @@ import {
 } from "@fortaine/fetch-event-source";
 import { prettyObject } from "@/app/utils/format";
 import { getClientConfig } from "@/app/config/client";
-import { makeAzurePath } from "@/app/azure";
 import {
   getMessageTextContent,
   getMessageImages,
@@ -40,38 +42,54 @@ export interface OpenAIListModelResponse {
   }>;
 }
 
+interface RequestPayload {
+  messages: {
+    role: "system" | "user" | "assistant";
+    content: string | MultimodalContent[];
+  }[];
+  stream?: boolean;
+  model: string;
+  temperature: number;
+  presence_penalty: number;
+  frequency_penalty: number;
+  top_p: number;
+  max_tokens?: number;
+}
+
 export class ChatGPTApi implements LLMApi {
   private disableListModels = true;
 
   path(path: string): string {
     const accessStore = useAccessStore.getState();
 
-    const isAzure = accessStore.provider === ServiceProvider.Azure;
+    let baseUrl = "";
 
-    if (isAzure && !accessStore.isValidAzure()) {
-      throw Error(
-        "incomplete azure config, please check it in your settings page",
-      );
+    const isAzure = path.includes("deployments");
+    if (accessStore.useCustomConfig) {
+      if (isAzure && !accessStore.isValidAzure()) {
+        throw Error(
+          "incomplete azure config, please check it in your settings page",
+        );
+      }
+
+      baseUrl = isAzure ? accessStore.azureUrl : accessStore.openaiUrl;
     }
-
-    let baseUrl = isAzure ? accessStore.azureUrl : accessStore.openaiUrl;
 
     if (baseUrl.length === 0) {
       const isApp = !!getClientConfig()?.isApp;
-      baseUrl = isApp
-        ? DEFAULT_API_HOST + "/proxy" + ApiPath.OpenAI
-        : ApiPath.OpenAI;
+      const apiPath = isAzure ? ApiPath.Azure : ApiPath.OpenAI;
+      baseUrl = isApp ? DEFAULT_API_HOST + "/proxy" + apiPath : apiPath;
     }
 
     if (baseUrl.endsWith("/")) {
       baseUrl = baseUrl.slice(0, baseUrl.length - 1);
     }
-    if (!baseUrl.startsWith("http") && !baseUrl.startsWith(ApiPath.OpenAI)) {
+    if (
+      !baseUrl.startsWith("http") &&
+      !isAzure &&
+      !baseUrl.startsWith(ApiPath.OpenAI)
+    ) {
       baseUrl = "https://" + baseUrl;
-    }
-
-    if (isAzure) {
-      path = makeAzurePath(path, accessStore.azureApiVersion);
     }
 
     console.log("[Proxy Endpoint] ", baseUrl, path);
@@ -95,10 +113,11 @@ export class ChatGPTApi implements LLMApi {
       ...useChatStore.getState().currentSession().mask.modelConfig,
       ...{
         model: options.config.model,
+        providerName: options.config.providerName,
       },
     };
 
-    const requestPayload = {
+    const requestPayload: RequestPayload = {
       messages,
       stream: options.config.stream,
       model: modelConfig.model,
@@ -111,13 +130,8 @@ export class ChatGPTApi implements LLMApi {
     };
 
     // add max_tokens to vision model
-    if (visionModel) {
-      Object.defineProperty(requestPayload, "max_tokens", {
-        enumerable: true,
-        configurable: true,
-        writable: true,
-        value: modelConfig.max_tokens,
-      });
+    if (visionModel && modelConfig.model.includes("preview")) {
+      requestPayload["max_tokens"] = Math.max(modelConfig.max_tokens, 4000);
     }
 
     console.log("[Request] openai payload: ", requestPayload);
@@ -127,7 +141,35 @@ export class ChatGPTApi implements LLMApi {
     options.onController?.(controller);
 
     try {
-      const chatPath = this.path(OpenaiPath.ChatPath);
+      let chatPath = "";
+      if (modelConfig.providerName === ServiceProvider.Azure) {
+        // find model, and get displayName as deployName
+        const { models: configModels, customModels: configCustomModels } =
+          useAppConfig.getState();
+        const {
+          defaultModel,
+          customModels: accessCustomModels,
+          useCustomConfig,
+        } = useAccessStore.getState();
+        const models = collectModelsWithDefaultModel(
+          configModels,
+          [configCustomModels, accessCustomModels].join(","),
+          defaultModel,
+        );
+        const model = models.find(
+          (model) =>
+            model.name === modelConfig.model &&
+            model?.provider?.providerName === ServiceProvider.Azure,
+        );
+        chatPath = this.path(
+          Azure.ChatPath(
+            (model?.displayName ?? model?.name) as string,
+            useCustomConfig ? useAccessStore.getState().azureApiVersion : "",
+          ),
+        );
+      } else {
+        chatPath = this.path(OpenaiPath.ChatPath);
+      }
       const chatPayload = {
         method: "POST",
         body: JSON.stringify(requestPayload),
@@ -151,6 +193,9 @@ export class ChatGPTApi implements LLMApi {
           if (finished || controller.signal.aborted) {
             responseText += remainText;
             console.log("[Response Animation] finished");
+            if (responseText?.length === 0) {
+              options.onError?.(new Error("empty response from server"));
+            }
             return;
           }
 
@@ -225,19 +270,31 @@ export class ChatGPTApi implements LLMApi {
             }
             const text = msg.data;
             try {
-              const json = JSON.parse(text) as {
-                choices: Array<{
-                  delta: {
-                    content: string;
-                  };
-                }>;
-              };
-              const delta = json.choices[0]?.delta?.content;
+              const json = JSON.parse(text);
+              const choices = json.choices as Array<{
+                delta: { content: string };
+              }>;
+              const delta = choices[0]?.delta?.content;
+              const textmoderation = json?.prompt_filter_results;
+
               if (delta) {
                 remainText += delta;
               }
+
+              if (
+                textmoderation &&
+                textmoderation.length > 0 &&
+                ServiceProvider.Azure
+              ) {
+                const contentFilterResults =
+                  textmoderation[0]?.content_filter_results;
+                console.log(
+                  `[${ServiceProvider.Azure}] [Text Moderation] flagged categories result:`,
+                  contentFilterResults,
+                );
+              }
             } catch (e) {
-              console.error("[Request] parse error", text);
+              console.error("[Request] parse error", text, msg);
             }
           },
           onclose() {
